@@ -26,7 +26,7 @@ export default function Quiz({ questions, onComplete, moduleId }) {
       setShowExplanation(false);
     } else {
       setFinished(true);
-      const correctCount = [...answers, { correct: selected === q.correct }].filter((a) => a.correct).length;
+      const correctCount = answers.filter((a) => a.correct).length;
       const score = Math.round((correctCount / total) * 100);
       const passed = correctCount / total >= PASS_THRESHOLD;
       onComplete(score, passed);
