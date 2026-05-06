@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Nunito', sans-serif;
+    color: #1A1753;
+    background-color: #E8F5F2;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    color: #1A1753;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-teal text-white font-bold px-6 py-3 rounded-xl hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply bg-navy text-white font-bold px-6 py-3 rounded-xl hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .btn-outline {
+    @apply border-2 border-teal text-teal font-bold px-6 py-3 rounded-xl hover:bg-teal hover:text-white transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+
+  .card-cream {
+    @apply bg-cream rounded-2xl shadow-md p-6;
+  }
+
+  .badge-pill {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold;
+  }
+
+  .section-heading {
+    @apply text-2xl font-extrabold text-navy mb-4;
+  }
+
+  .progress-bar-track {
+    @apply bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply bg-teal h-full rounded-full transition-all duration-700 ease-out;
+  }
+
+  .ai-message-user {
+    @apply bg-navy text-white rounded-2xl rounded-br-md px-4 py-3 max-w-xs ml-auto text-sm;
+  }
+
+  .ai-message-assistant {
+    @apply bg-mint text-navy rounded-2xl rounded-bl-md px-4 py-3 max-w-xs text-sm;
+  }
+}
+
+@layer utilities {
+  .blob-bg {
+    background: radial-gradient(ellipse at 20% 50%, rgba(45, 191, 173, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(245, 166, 35, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(232, 99, 90, 0.08) 0%, transparent 50%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #2DBFAD, #1A1753);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Typing indicator animation */
+@keyframes bounce-dot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+.typing-dot {
+  animation: bounce-dot 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Badge pulse animation */
+@keyframes badge-pop {
+  0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.badge-pop {
+  animation: badge-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Quiz option hover */
+.quiz-option {
+  @apply border-2 border-gray-200 rounded-xl p-4 cursor-pointer transition-all duration-150 hover:border-teal hover:bg-mint;
+}
+
+.quiz-option.selected {
+  @apply border-teal bg-mint;
+}
+
+.quiz-option.correct {
+  @apply border-green-500 bg-green-50;
+}
+
+.quiz-option.incorrect {
+  @apply border-coral bg-red-50;
+}
