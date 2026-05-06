@@ -2496,3 +2496,5 @@ const conceptData = {
     },
   ],
 };
+
+export default conceptData;
