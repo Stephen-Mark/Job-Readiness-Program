@@ -10,6 +10,8 @@ import AICoach from '../components/AICoach';
 import InterviewCoach from '../components/InterviewCoach';
 import SkillsAssessment from '../components/SkillsAssessment';
 import PriorityActivity from '../components/PriorityActivity';
+import ConceptSection from '../components/ConceptSection';
+import conceptData from '../data/conceptData';
 
 const TABS = [
   { id: 'learn', label: '📖 Learn' },
@@ -31,6 +33,12 @@ export default function ModulePage() {
 
   const { markStarted, markCompleted, saveQuizScore, getModuleProgress } = useProgress();
   const modProgress = getModuleProgress(moduleId);
+  const [completedConcepts, setCompletedConcepts] = useState(new Set());
+  const concepts = conceptData[moduleId] || [];
+
+  function handleConceptComplete(i) {
+    setCompletedConcepts((prev) => new Set([...prev, i]));
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -48,6 +56,7 @@ export default function ModulePage() {
     setQuizDone(false);
     setQuizScore(null);
     setQuizPassed(null);
+    setCompletedConcepts(new Set());
   }, [id]);
 
   function handleQuizComplete(score, passed) {
@@ -170,12 +179,24 @@ export default function ModulePage() {
             {/* Key concepts */}
             <div className="space-y-4">
               <h2 className="section-heading">Key concepts</h2>
-              {module.keyConcepts.map((concept, i) => (
-                <div key={i} className="card border-l-4 border-teal">
-                  <h3 className="font-extrabold text-navy mb-2">{concept.title}</h3>
-                  <p className="text-sm text-mid leading-relaxed">{concept.body}</p>
-                </div>
-              ))}
+              {concepts.length > 0 ? (
+                concepts.map((concept, i) => (
+                  <ConceptSection
+                    key={i}
+                    concept={concept}
+                    index={i}
+                    isCompleted={completedConcepts.has(i)}
+                    onConceptComplete={handleConceptComplete}
+                  />
+                ))
+              ) : (
+                module.keyConcepts.map((concept, i) => (
+                  <div key={i} className="card border-l-4 border-teal">
+                    <h3 className="font-extrabold text-navy mb-2">{concept.title}</h3>
+                    <p className="text-sm text-mid leading-relaxed">{concept.body}</p>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* Download placeholder */}
