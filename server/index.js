@@ -21,7 +21,7 @@ app.use('/api/chat', chatRouter);
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    aiConfigured: !!process.env.ANTHROPIC_API_KEY,
+    aiConfigured: !!process.env.GROQ_API_KEY,
     timestamp: new Date().toISOString(),
   });
 });
@@ -36,5 +36,5 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`AI Coach: ${process.env.ANTHROPIC_API_KEY ? '✅ configured' : '⚠️  ANTHROPIC_API_KEY not set'}`);
+  console.log(`AI Coach: ${process.env.GROQ_API_KEY ? '✅ configured (Groq)' : '⚠️  GROQ_API_KEY not set'}`);
 });

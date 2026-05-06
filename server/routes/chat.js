@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Anthropic = require('@anthropic-ai/sdk');
+const Groq = require('groq-sdk');
 
 const BASE_SYSTEM_PROMPT = `You are a friendly, encouraging work readiness coach for Brimbank Tech School. You help Year 9–12 students in Victoria, Australia understand workplace skills. Keep responses short, practical, and easy to understand. Use examples relevant to young people. Never be preachy or lecture students — be a supportive peer coach. Format responses with short paragraphs. Maximum 3 paragraphs per response.`;
 
@@ -21,7 +21,7 @@ Keep your total response under 250 words. Be encouraging — this student is bui
 router.post('/', async (req, res) => {
   const { messages, moduleContext, mode } = req.body;
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return res.status(503).json({
       error: 'AI Coach is not set up yet — ask your teacher to configure it.',
       code: 'NO_API_KEY',
@@ -33,22 +33,24 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
     const systemPrompt = mode === 'interview'
       ? INTERVIEW_SYSTEM_PROMPT
       : `${BASE_SYSTEM_PROMPT}${moduleContext ? `\n\nThe student is currently working on: "${moduleContext}". Keep your answers relevant to this topic.` : ''}`;
 
-    const response = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+    const response = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       max_tokens: mode === 'interview' ? 500 : 300,
-      system: systemPrompt,
-      messages: messages.map(({ role, content }) => ({ role, content })),
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...messages.map(({ role, content }) => ({ role, content })),
+      ],
     });
 
-    res.json({ content: response.content[0].text });
+    res.json({ content: response.choices[0].message.content });
   } catch (err) {
-    console.error('Claude API error:', err.message);
+    console.error('Groq API error:', err.message);
     if (err.status === 401) {
       return res.status(401).json({ error: 'Invalid API key. Please check your configuration.', code: 'INVALID_KEY' });
     }
